@@ -2,6 +2,8 @@ package com.wang.app.rest.Models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 //lets us know user class will be table in database
 public class User {
@@ -11,6 +13,9 @@ public class User {
     //this tells mySQL that id will be uinque for each uer
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Answer> answers;
 
     @Column
     //each attribute will be column in database
