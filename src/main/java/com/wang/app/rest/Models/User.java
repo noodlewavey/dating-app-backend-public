@@ -85,4 +85,12 @@ public class User {
     public void setAge(int age) {
         this.age = age;
     }
+
+    public Score getScore() {
+        return score;
+    }
+
+    public void setScore(Score score) {
+        this.score = score;
+    }
 }

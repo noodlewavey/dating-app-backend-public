@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class QuizController {
@@ -20,23 +22,38 @@ public class QuizController {
     private UserRepo userRepo;
 
     @PostMapping("/submit-answers")
-    public ResponseEntity<String> submitAnswers(@RequestBody List<Answer> answers) {
+    public ResponseEntity<String> submitAnswers(@RequestBody Map<Integer,Integer > answersData) {
         //Create a new user and save it to the database
         User user = new User();
 
-        //Calculating score based on answers
-        int score = calculateScore(answers);
+        //the input array must have keys and values
+        //example of input array: {1:2, 2:4, 3:1}
+        //left is question ID, right is answer value
+        //this would be JSON, the keys and values are used to represent properties and values of an object 
 
-        //Set the score for the user
+        //Creating answer objects and associating them with the user
+        List<Answer> answers = new ArrayList<>();
+        //looping over array of answers and creating answer objects
+        for (Map.Entry<Integer, Integer> entry : answersData.entrySet()) {
+            Integer questionId = entry.getKey();
+            Integer answerValue = entry.getValue();
 
-        user.setScore(score);
+            Answer answer = new Answer(questionId, answerValue);
+            answer.setUser(user); // Associate the answer with the user
+            answers.add(answer);  // Add the answer to the answers list
+        }
 
+        //Saving user to the database
+        userRepo.save(user);
 
         //Set answers for the user
         user.setAnswers(answers);
 
-        //Saving user to the database
-        userRepo.save(user);
+        //Calculating score based on answers
+        Score score = calculateScore(answers);
+
+        //Creating score object and associating it with the user
+        user.setScore(score);
 
         //Return a response to the client
         return ResponseEntity.ok("Answers submitted successfully");
