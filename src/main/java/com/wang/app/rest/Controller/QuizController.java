@@ -25,6 +25,9 @@ public class QuizController {
     private UserRepo userRepo;
 
     private Map<Integer, AnswerInfo> questionToMap = new HashMap<>();
+    //we use map interface type to make code more flexible...general map type
+    //if we wanna change to a different type of map, we can do that easily
+    //just change the right side of the assignment operator to a different type of map
 
     //(1) Extraversion, (2) Agreeableness, (3) Conscientiousness, (4) Emotional Stability, or (5) Intellect/Imagination)
     // and its direction of scoring (+ or -). These numbers should not be included in the actual survey questionnaire. For further information on scoring IPIP scales, click the following link:
