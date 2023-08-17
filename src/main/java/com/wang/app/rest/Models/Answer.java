@@ -13,6 +13,12 @@ public class Answer {
     @Column
     private int answerValue;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+    //many to one: many answers belong to single user
+    //joincolumn: this is the foreign key in answer table that references primary key of user table
+
 
     public Answer(int questionId, int answerValue) {
         this.questionId = questionId;

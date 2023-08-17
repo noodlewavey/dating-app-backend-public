@@ -16,6 +16,13 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Answer> answers;
+    //one to many: one user can have multiple answers
+    //cascade setting ensures changes to user will be cascaded to answers
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Score score;
+    //one to one: one user can have one score at most,,,
+    //cascade setting ensures changes to user will be cascaded to score
 
     @Column
     //each attribute will be column in database
@@ -32,6 +39,12 @@ public class User {
 
     //this id attribute is a primary key in database
 
+    public void setAnswers(List<Answer> answers) {
+        if (answers == null || answers.size() != 50) {
+            throw new IllegalArgumentException("Answers list must have 50 answers.");
+        }
+        this.answers = answers;
+    }
     public long getId(){
         return id;
     }
