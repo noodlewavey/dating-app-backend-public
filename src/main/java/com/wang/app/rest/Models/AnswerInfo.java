@@ -4,7 +4,7 @@ public class AnswerInfo {
     private int trait;
     private String valence;
 
-    public AnswerInfo(String trait, String valence) {
+    public AnswerInfo(int trait, String valence) {
         this.trait = trait;
         this.valence = valence;
     }
@@ -18,4 +18,3 @@ public class AnswerInfo {
     }
 }
 
-}

@@ -75,4 +75,23 @@ public class Score {
     public void setIntellect(int intellect) {
         Intellect = intellect;
     }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    @Override
+    public String toString() {
+        return "Score{" +
+                "extraversion=" + getExtraversion() +
+                ", agreeableness=" + getAgreeableness() +
+                ", conscientiousness=" + getConscientiousness() +
+                ", emotionalStability=" + getEmotionalStability()+
+                ", intellect=" +getIntellect() +
+                '}';
+    }
 }

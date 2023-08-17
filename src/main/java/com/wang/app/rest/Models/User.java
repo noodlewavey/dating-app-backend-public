@@ -40,9 +40,6 @@ public class User {
     //this id attribute is a primary key in database
 
     public void setAnswers(List<Answer> answers) {
-        if (answers == null || answers.size() != 50) {
-            throw new IllegalArgumentException("Answers list must have 50 answers.");
-        }
         this.answers = answers;
     }
     public long getId(){

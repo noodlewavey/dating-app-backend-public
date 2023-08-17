@@ -6,6 +6,7 @@ import com.wang.app.rest.Models.AnswerInfo;
 import com.wang.app.rest.Models.Score;
 import com.wang.app.rest.Models.User;
 import com.wang.app.rest.Repo.UserRepo;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +30,9 @@ public class QuizController {
     // and its direction of scoring (+ or -). These numbers should not be included in the actual survey questionnaire. For further information on scoring IPIP scales, click the following link:
 
     //keys in the hash map are the question numbers, values are the answer info objects
-    public HashMap<Integer, AnswerInfo> setQuestionToMap() {
+    @PostConstruct
+    //this postConstruct ensures questionToMap is initialized as soon as controller is created, before requests made
+    public void initQuestionToMap() {
         questionToMap.put(1, new AnswerInfo(1, "+"));
         questionToMap.put(2, new AnswerInfo(2, "-"));
         questionToMap.put(3, new AnswerInfo(3, "+"));
@@ -80,12 +83,11 @@ public class QuizController {
         questionToMap.put(48, new AnswerInfo(3, "-"));
         questionToMap.put(49, new AnswerInfo(4, "+"));
         questionToMap.put(50, new AnswerInfo(5, "-"));
-
     }
-
+    //WHY IS THE return type map and not Hashmap
 
     @PostMapping("/submit-answers")
-    public ResponseEntity<String> submitAnswers(@RequestBody Map<Integer,Integer > answersData) {
+    public ResponseEntity<String> submitAnswers(@RequestBody Map<Integer, Integer> answersData) {
         //Create a new user and save it to the database
         User user = new User();
 
@@ -106,8 +108,6 @@ public class QuizController {
             answers.add(answer);  // Add the answer to the answers list
         }
 
-        //Saving user to the database
-        userRepo.save(user);
 
         //Set answers for the user
         user.setAnswers(answers);
@@ -118,69 +118,66 @@ public class QuizController {
         //Creating score object and associating it with the user
         user.setScore(score);
 
+        //Saving user to the database
+        userRepo.save(user);
+
         //Return a response to the client
-        return ResponseEntity.ok("Answers submitted successfully");
+        return ResponseEntity.ok("Answers submitted successfully, here is the score for the user: " + score.toString() + "");
 
     }
 
 
-
-    public Score calculateScore(List<Answer> answers) {
+    private Score calculateScore(List<Answer> answers) {
         int Extraversion = 0;
         int Agreeableness = 0;
         int Conscientiousness = 0;
         int EmotionalStability = 0;
         int Intellect = 0;
 
-        for (Answer answer: answers){
+        for (Answer answer : answers) {
             int questionId = answer.getQuestionId();
             int answerValue = answer.getAnswerValue();
 
-            if (questionToMap.containsKey(questionId)){
+            if (questionToMap.containsKey(questionId)) {
                 AnswerInfo answerInfo = questionToMap.get(questionId);
                 //take the answer objec
                 int trait = answerInfo.getTrait();
                 String valence = answerInfo.getValence();
-                if (trait==1){
-                    if (valence.equals("+")){
+                if (trait == 1) {
+                    if (valence.equals("+")) {
                         Extraversion += answerValue;
-                    }
-                    else{
-                        Extraversion += 6-answerValue;
+                    } else {
+                        Extraversion += 6 - answerValue;
                     }
                 }
-                if (trait==2){
-                    if (valence.equals("+")){
+                if (trait == 2) {
+                    if (valence.equals("+")) {
                         Agreeableness += answerValue;
-                    }
-                    else{
-                        Agreeableness += 6-answerValue;
+                    } else {
+                        Agreeableness += 6 - answerValue;
                     }
 
                 }
-                if (trait==3){
-                    if (valence.equals("+")){
+                if (trait == 3) {
+                    if (valence.equals("+")) {
                         Conscientiousness += answerValue;
-                    }
-                    else{
-                        Conscientiousness += 6-answerValue;
+                    } else {
+                        Conscientiousness += 6 - answerValue;
                     }
                 }
-                if (trait==4){
-                    if (valence.equals("+")){
+                if (trait == 4) {
+                    if (valence.equals("+")) {
                         EmotionalStability += answerValue;
-                    }
-                    else{
-                        EmotionalStability += 6-answerValue;
+                    } else {
+                        EmotionalStability += 6 - answerValue;
                     }
 
                 }
-                if(trait==5){
-                    if (valence.equals("+")){
+                if (trait == 5) {
+                    if (valence.equals("+")) {
                         Intellect += answerValue;
-                    }
-                    else{
-                        Intellect += 6-answerValue;
+                    } else {
+                        Intellect += 6 - answerValue;
                     }
                 }
             }
@@ -195,6 +192,6 @@ public class QuizController {
         returnScore.setEmotionalStability(EmotionalStability);
 
         return returnScore;
-        
+
     }
 }
