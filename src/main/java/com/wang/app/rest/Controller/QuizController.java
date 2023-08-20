@@ -90,7 +90,7 @@ public class QuizController {
     //WHY IS THE return type map and not Hashmap
 
     @PostMapping("/submit-answers")
-    public ResponseEntity<String> submitAnswers(@RequestBody Map<Integer, Integer> answersData) {
+    public ResponseEntity<Score> submitAnswers(@RequestBody Map<Integer, Integer> answersData) {
         //Create a new user and save it to the database
         User user = new User();
 
@@ -125,7 +125,7 @@ public class QuizController {
         userRepo.save(user);
 
         //Return a response to the client
-        return ResponseEntity.ok("Answers submitted successfully, here is the score for the user: " + score.toString() + "");
+        return ResponseEntity.ok(score);
 
     }
 
