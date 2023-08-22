@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import com.wang.app.rest.service.ScoreCalculationService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +24,9 @@ public class QuizController {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private ScoreCalculationService scoreCalculationService; //inject the service into the controller
 
     private Map<Integer, AnswerInfo> questionToMap = new HashMap<>();
     //we use map interface type to make code more flexible...general map type
@@ -116,7 +120,7 @@ public class QuizController {
         user.setAnswers(answers);
 
         //Calculating score based on answers
-        Score score = calculateScore(answers);
+        Score score = scoreCalculationService.calculateScore(answers, questionToMap);
 
         //Creating score object and associating it with the user
         user.setScore(score);
@@ -126,75 +130,6 @@ public class QuizController {
 
         //Return a response to the client
         return ResponseEntity.ok(score);
-
-    }
-
-
-    private Score calculateScore(List<Answer> answers) {
-        int Extraversion = 0;
-        int Agreeableness = 0;
-        int Conscientiousness = 0;
-        int EmotionalStability = 0;
-        int Intellect = 0;
-
-        for (Answer answer : answers) {
-            int questionId = answer.getQuestionId();
-            int answerValue = answer.getAnswerValue();
-
-            if (questionToMap.containsKey(questionId)) {
-                AnswerInfo answerInfo = questionToMap.get(questionId);
-                //take the answer objec
-                int trait = answerInfo.getTrait();
-                String valence = answerInfo.getValence();
-                if (trait == 1) {
-                    if (valence.equals("+")) {
-                        Extraversion += answerValue;
-                    } else {
-                        Extraversion += 6 - answerValue;
-                    }
-                }
-                if (trait == 2) {
-                    if (valence.equals("+")) {
-                        Agreeableness += answerValue;
-                    } else {
-                        Agreeableness += 6 - answerValue;
-                    }
-
-                }
-                if (trait == 3) {
-                    if (valence.equals("+")) {
-                        Conscientiousness += answerValue;
-                    } else {
-                        Conscientiousness += 6 - answerValue;
-                    }
-                }
-                if (trait == 4) {
-                    if (valence.equals("+")) {
-                        EmotionalStability += answerValue;
-                    } else {
-                        EmotionalStability += 6 - answerValue;
-                    }
-
-                }
-                if (trait == 5) {
-                    if (valence.equals("+")) {
-                        Intellect += answerValue;
-                    } else {
-                        Intellect += 6 - answerValue;
-                    }
-                }
-            }
-
-        }
-
-        Score returnScore = new Score();
-        returnScore.setExtraversion(Extraversion);
-        returnScore.setConscientiousness(Conscientiousness);
-        returnScore.setAgreeableness(Agreeableness);
-        returnScore.setIntellect(Intellect);
-        returnScore.setEmotionalStability(EmotionalStability);
-
-        return returnScore;
 
     }
 }
