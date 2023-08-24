@@ -35,24 +35,38 @@ public class AuthController {
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
-
+//initializing things we're using
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto){
         if(userRepository.existsByUsername(registerDto.username)){
             return new ResponseEntity<>("Username is taken", HttpStatus.BAD_REQUEST);
         }
         UserEntity user = new UserEntity();
+        //if user doesnt exist, create a new user
         user.setUsername(registerDto.username);
         user.setPassword(passwordEncoder.encode(registerDto.password));
+        //we hash the password in case theres a security breach
 
         Role roles = roleRepository.findByName("USER").get();
+        //this fetches role entity with name "USER"..the user at hand is assigned the user role...
         user.setRoles(Collections.singletonList(roles));
+        //once "USR" role is fetched, assigned to newly resgistered user
+        //collections.singletonList(roles)....creaes a list with single element
+        //also immutable
+        //but this restricts us to assign a single role to the user...
+        //not sure
 
         userRepository.save(user);
 
         return new ResponseEntity<>("User registered success",HttpStatus.OK);
 
         //we're creating a usr entity, we need to set roles
+        //we use register data transfer object....
+        //encapsulates data reequired for user registration...allows us to not expose raw passwod in entites
 
     }
+
+    //this is an endpoint to register a user....
+    //think of how to combine this with google .....
+    //commit this finished product to git, then modify with google
 }
