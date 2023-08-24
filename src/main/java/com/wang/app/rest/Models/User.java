@@ -29,6 +29,12 @@ public class User {
     private String firstName;
 
     @Column
+    private String user; //for my userController
+
+    @Column
+    private String token; //for my usercoNTROLLER
+
+    @Column
     private String lastName;
 
     @Column
@@ -90,4 +96,21 @@ public class User {
     public void setScore(Score score) {
         this.score = score;
     }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
 }
