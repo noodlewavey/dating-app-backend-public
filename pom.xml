@@ -49,8 +49,8 @@
 
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt</artifactId><!-- Replace with the appropriate version -->
-			<version>0.9.1</version>
+			<artifactId>jjwt-api</artifactId><!-- Replace with the appropriate version -->
+			<version>0.11.5</version>
 		</dependency>
 
 		<dependency>

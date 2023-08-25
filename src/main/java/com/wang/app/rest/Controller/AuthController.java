@@ -4,12 +4,16 @@ import com.wang.app.rest.Models.Role;
 import com.wang.app.rest.Models.UserEntity;
 import com.wang.app.rest.Repo.RoleRepository;
 import com.wang.app.rest.Repo.UserRepository;
+import com.wang.app.rest.dto.LoginDto;
 import com.wang.app.rest.dto.RegisterDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,16 +39,18 @@ public class AuthController {
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
+
+
 //initializing things we're using
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto){
-        if(userRepository.existsByUsername(registerDto.username)){
+        if(userRepository.existsByUsername(registerDto.getUsername())){
             return new ResponseEntity<>("Username is taken", HttpStatus.BAD_REQUEST);
         }
         UserEntity user = new UserEntity();
         //if user doesnt exist, create a new user
-        user.setUsername(registerDto.username);
-        user.setPassword(passwordEncoder.encode(registerDto.password));
+        user.setUsername(registerDto.getUsername());
+        user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         //we hash the password in case theres a security breach
 
         Role roles = roleRepository.findByName("USER").get();
@@ -69,4 +75,17 @@ public class AuthController {
     //this is an endpoint to register a user....
     //think of how to combine this with google .....
     //commit this finished product to git, then modify with google
+
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginDto loginDto){
+
+        //shoudl i use getter and setter for dto?
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(),
+                loginDto.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        //this is some type of storage
+        return new ResponseEntity<>("User signed in success!", HttpStatus.OK);
+
+    }
 }

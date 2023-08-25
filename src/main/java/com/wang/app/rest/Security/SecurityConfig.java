@@ -1,11 +1,13 @@
 package com.wang.app.rest.Security;
 
+import com.mysql.cj.protocol.x.XAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,6 +20,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.AuthenticationEntryPoint;
+
+
+import javax.swing.*;
 
 @Configuration
 @EnableWebSecurity
@@ -31,9 +37,12 @@ public class SecurityConfig {
 
     private CustomUserDetailsService userDetailsService;
 
+    private JwtAuthEntryPoint authEntryPoint;
+
     @Autowired
-    public SecurityConfig(CustomUserDetailsService userDetailsService) {
+    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtAuthEntryPoint authEntryPoint) {
         this.userDetailsService = userDetailsService;
+        this.authEntryPoint = authEntryPoint;
     }
 
     @Bean
@@ -41,7 +50,13 @@ public class SecurityConfig {
 
         http
                 .csrf((csrf) -> csrf.disable());
+        http
+//                .exceptionHandling(Customizer.withDefaults())
+        .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(authEntryPoint))
+                .sessionManagement(Customizer.withDefaults())
+                        .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+//fixed deprecated stuff
         http
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers("/api/auth/**").permitAll()
@@ -58,21 +73,21 @@ public class SecurityConfig {
     //defines permissions for diff api endpoints
 
 
-    @Bean
-    public UserDetailsService users() {
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password("password")
-                .roles("ADMIN")
-                .build();
-        UserDetails user = User.builder()
-                .username("user")
-                .password("password")
-                .roles("USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(admin, user);
-    }
+//    @Bean
+//    public UserDetailsService users() {
+//        UserDetails admin = User.builder()
+//                .username("admin")
+//                .password("password")
+//                .roles("ADMIN")
+//                .build();
+//        UserDetails user = User.builder()
+//                .username("user")
+//                .password("password")
+//                .roles("USER")
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(admin, user);
+//    }
     //this code is for testing purposes
 
     @Bean
