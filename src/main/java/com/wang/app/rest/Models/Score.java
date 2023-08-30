@@ -11,11 +11,10 @@ public class Score {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-    //one to one means one score belongs to one user...each score assocaited with single user
-    //joincolumn means foreign key column name user_id references primary key of user table
+    @JoinColumn(name = "user_entity_id")
+    private UserEntity user;
 
     @Column
     private int Extraversion;
@@ -76,11 +75,11 @@ public class Score {
         Intellect = intellect;
     }
 
-    public void setUser(User user) {
+    public void setUserEntity(UserEntity user) {
         this.user = user;
     }
 
-    public User getUser() {
+    public UserEntity getUserEntity() {
         return user;
     }
 

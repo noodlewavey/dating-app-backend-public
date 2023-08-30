@@ -14,8 +14,8 @@ public class Answer {
     private int answerValue;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "user_entity_id")
+    private UserEntity user;
     //many to one: many answers belong to single user
     //joincolumn: this is the foreign key in answer table that references primary key of user table
 
@@ -53,11 +53,11 @@ public class Answer {
         this.id = id;
     }
 
-    public User getUser() {
+    public UserEntity getUserEntity () {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUserEntity(UserEntity user) {
         this.user = user;
     }
 }
