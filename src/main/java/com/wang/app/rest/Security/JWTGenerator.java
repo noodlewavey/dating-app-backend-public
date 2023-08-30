@@ -38,4 +38,20 @@ public class JWTGenerator {
                 .getBody();
         return claims.getSubject();
     }
+
+    public boolean validateToken(String token){
+        try{
+            Jwts.parserBuilder()
+                    .setSigningKey(Keys.hmacShaKeyFor(SecurityConstants.JWT_SECRET.getBytes()))
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+            //this is a valid token
+            //updated deprecated code
+        }catch(Exception e){
+            System.out.println("Invalid JWT token, expired or incorrect");
+            //form of authentication
+        }
+        return false;
+    }
 }
