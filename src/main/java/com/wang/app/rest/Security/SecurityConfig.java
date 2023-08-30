@@ -60,7 +60,9 @@ public class SecurityConfig {
 //fixed deprecated stuff
         http
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/submit-answers").permitAll()
+                        .requestMatchers("/api/auth/register").permitAll()
+                        .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/user/**").hasRole("USER")
                         .anyRequest().authenticated());
