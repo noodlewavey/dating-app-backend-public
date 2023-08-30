@@ -4,8 +4,11 @@ import com.wang.app.rest.Models.Role;
 import com.wang.app.rest.Models.UserEntity;
 import com.wang.app.rest.Repo.RoleRepository;
 import com.wang.app.rest.Repo.UserRepository;
+import com.wang.app.rest.Security.JWTGenerator;
+import com.wang.app.rest.dto.AuthResponseDto;
 import com.wang.app.rest.dto.LoginDto;
 import com.wang.app.rest.dto.RegisterDto;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -32,12 +35,15 @@ public class AuthController {
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
 
+    private JWTGenerator jwtGenerator;
+
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, JWTGenerator jwtGenerator) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtGenerator = jwtGenerator;
     }
 
 
@@ -78,14 +84,15 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto){
+    public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto){
 
         //shoudl i use getter and setter for dto?
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(),
                 loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = jwtGenerator.generateToken(authentication);
         //this is some type of storage
-        return new ResponseEntity<>("User signed in success!", HttpStatus.OK);
+        return new ResponseEntity<>(new AuthResponseDto(token), HttpStatus.OK);
 
     }
 }
