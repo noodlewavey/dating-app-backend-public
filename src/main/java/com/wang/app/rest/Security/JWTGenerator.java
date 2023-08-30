@@ -7,12 +7,15 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import java.security.Key;
 
 import java.util.Date;
 
 //this class generates a token for us...
 @Component
 public class JWTGenerator {
+
+    private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     public String generateToken(Authentication authentication){
         String username = authentication.getName();
         Date currentDate = new Date();
@@ -22,7 +25,7 @@ public class JWTGenerator {
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(expireDate)
-                .signWith(Keys.hmacShaKeyFor(SecurityConstants.JWT_SECRET.getBytes()))
+                .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
         return token;
         //we need other methods...we want to get username from jwt and to validate token
