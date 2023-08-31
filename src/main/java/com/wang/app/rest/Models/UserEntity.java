@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jdk.jfr.DataAmount;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,8 @@ public class UserEntity {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Score score;
+
+
 
 }
 

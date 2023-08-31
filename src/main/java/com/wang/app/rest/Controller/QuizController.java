@@ -2,7 +2,6 @@ package com.wang.app.rest.Controller;
 
 
 import com.wang.app.rest.Models.*;
-import com.wang.app.rest.Repo.UserRepo;
 import com.wang.app.rest.Repo.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,8 +92,10 @@ public class QuizController {
     //WHY IS THE return type map and not Hashmap
 
     @PostMapping("/submit-answers")
-    public ResponseEntity<Score> submitAnswers(@RequestBody Map<Integer, Integer> answersData, @AuthenticationPrincipal UserEntity currentUserEntity) {
+    public ResponseEntity<Score> submitAnswers(@RequestBody Map<Integer, Integer> answersData, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         //Create a new user and save it to the database
+
+        UserEntity currentUserEntity = customUserDetails.getUserEntity();
 
         //the input array must have keys and values
         //example of input array: {1:2, 2:4, 3:1}

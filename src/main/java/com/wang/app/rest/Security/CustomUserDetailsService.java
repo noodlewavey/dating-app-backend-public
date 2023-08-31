@@ -1,5 +1,6 @@
 package com.wang.app.rest.Security;
 
+import com.wang.app.rest.Models.CustomUserDetails;
 import com.wang.app.rest.Models.Role;
 import com.wang.app.rest.Models.UserEntity;
 import com.wang.app.rest.Repo.UserRepository;
@@ -33,12 +34,14 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     public CustomUserDetailsService(UserRepository userRepository){
         this.userRepository = userRepository;
+
     }
     //intiialize above
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
         UserEntity user = userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("Username not found"));
-        return new User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
+//        return new User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
+        return new CustomUserDetails(user);
     }//this is userdetails user....
     //takes username as input, uses userRepository to find userentity....representation of app's data model
     //returns userDetails object that spring security uses to perform authentication and auth checks
