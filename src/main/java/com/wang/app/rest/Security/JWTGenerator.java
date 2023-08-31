@@ -35,7 +35,7 @@ public class JWTGenerator {
 
     public String getUsernameFromJWT(String token){
         Claims claims = Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(SecurityConstants.JWT_SECRET.getBytes()))
+                .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -45,15 +45,17 @@ public class JWTGenerator {
     public boolean validateToken(String token){
         try{
             Jwts.parserBuilder()
-                    .setSigningKey(Keys.hmacShaKeyFor(SecurityConstants.JWT_SECRET.getBytes()))
+                    .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
             return true;
             //this is a valid token
             //updated deprecated code
         }catch(Exception e){
+            System.out.println(token);
             System.out.println("Invalid JWT token, expired or incorrect");
             //form of authentication
+            //my code is entering this exception....
         }
         return false;
     }

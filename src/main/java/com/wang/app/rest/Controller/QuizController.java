@@ -91,7 +91,8 @@ public class QuizController {
     }
     //WHY IS THE return type map and not Hashmap
 
-    @PostMapping("/submit-answers")
+    @PostMapping("api/user/submit-answers")
+    //added this to make sure its accessible to users
     public ResponseEntity<Score> submitAnswers(@RequestBody Map<Integer, Integer> answersData, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         //Create a new user and save it to the database
 
