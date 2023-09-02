@@ -30,7 +30,6 @@ public class JWTGenerator {
         return token;
         //we need other methods...we want to get username from jwt and to validate token
 
-
     }
 
     public String getUsernameFromJWT(String token){
