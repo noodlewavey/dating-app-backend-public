@@ -2,13 +2,10 @@ package com.wang.app.rest.Models;
 
 import com.wang.app.rest.Models.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class CustomUserDetails implements UserDetails {
 
@@ -26,15 +23,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = userEntity.getRoles()
-                .stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
-
-        // Add the hardcoded "USER" role
-        authorities.add(new SimpleGrantedAuthority("USER"));
-
-        return authorities;
+        return Collections.emptyList();
     }
 
     @Override
