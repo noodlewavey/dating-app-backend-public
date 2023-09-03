@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jdk.jfr.DataAmount;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,12 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
+
+    @OneToOne
+    @JoinColumn(name="id")
+    @MapsId
+    private User user;
 
     private String username;
 
@@ -29,6 +35,15 @@ public class UserEntity {
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Answer> answers;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Score score;
+
+
+
 }
 
 //JOIN TABLE:  tracks which users have which roles

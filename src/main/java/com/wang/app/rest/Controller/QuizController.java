@@ -1,14 +1,12 @@
 package com.wang.app.rest.Controller;
 
 
-import com.wang.app.rest.Models.Answer;
-import com.wang.app.rest.Models.AnswerInfo;
-import com.wang.app.rest.Models.Score;
-import com.wang.app.rest.Models.User;
-import com.wang.app.rest.Repo.UserRepo;
+import com.wang.app.rest.Models.*;
+import com.wang.app.rest.Repo.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +21,7 @@ import java.util.Map;
 public class QuizController {
 
     @Autowired
-    private UserRepo userRepo;
+    private UserRepository userRepository;
 
     @Autowired
     private ScoreCalculationService scoreCalculationService; //inject the service into the controller
@@ -94,9 +92,10 @@ public class QuizController {
     //WHY IS THE return type map and not Hashmap
 
     @PostMapping("/submit-answers")
-    public ResponseEntity<Score> submitAnswers(@RequestBody Map<Integer, Integer> answersData) {
+    public ResponseEntity<Score> submitAnswers(@RequestBody Map<Integer, Integer> answersData, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         //Create a new user and save it to the database
-        User user = new User();
+
+        UserEntity currentUserEntity = customUserDetails.getUserEntity();
 
         //the input array must have keys and values
         //example of input array: {1:2, 2:4, 3:1}
@@ -111,22 +110,22 @@ public class QuizController {
             Integer answerValue = entry.getValue();
 
             Answer answer = new Answer(questionId, answerValue);
-            answer.setUser(user); // Associate the answer with the user
+            answer.setUserEntity(currentUserEntity); // Associate the answer with the user
             answers.add(answer);  // Add the answer to the answers list
         }
 
 
         //Set answers for the user
-        user.setAnswers(answers);
+        currentUserEntity.setAnswers(answers);
 
         //Calculating score based on answers
         Score score = scoreCalculationService.calculateScore(answers, questionToMap);
 
         //Creating score object and associating it with the user
-        user.setScore(score);
+        currentUserEntity.setScore(score);
 
         //Saving user to the database
-        userRepo.save(user);
+        userRepository.save(currentUserEntity);
 
         //Return a response to the client
         return ResponseEntity.ok(score);

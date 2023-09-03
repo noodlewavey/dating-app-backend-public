@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 import javax.swing.*;
@@ -59,11 +60,15 @@ public class SecurityConfig {
 //fixed deprecated stuff
         http
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/register").permitAll()
+                        .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers("/submit-answers").authenticated()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/user/**").hasRole("USER")
                         .anyRequest().authenticated());
 //                .csrf(AbstractHttpConfigurer::disable);
+
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         //this code refers to disable method of AbstractHTTPConfigurer class...
         //how should i figure out this from documentation?
@@ -100,8 +105,13 @@ public class SecurityConfig {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-}
 
+
+    @Bean
+    public JWTAuthenticationFilter jwtAuthenticationFilter(){
+        return new JWTAuthenticationFilter();
+    }
+}
 //what did we do?
 //we went in to our userdetails service and created two users, admin and user...
 //then we returned a new in memory user details manager with those two users...

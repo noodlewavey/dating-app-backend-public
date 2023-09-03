@@ -1,6 +1,7 @@
 package com.wang.app.rest.Controller;
 
 import com.wang.app.rest.Models.User;
+import com.wang.app.rest.Models.UserEntity;
 import com.wang.app.rest.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,9 @@ public class ApiControllers {
 
     @PostMapping(value="/save")
     public String saveUser(@RequestBody User user){
+        UserEntity userEntity = new UserEntity();
+        user.setUserEntity(userEntity);
+        userEntity.setUser(user);
         userRepo.save(user);
         return "User saved";
     }

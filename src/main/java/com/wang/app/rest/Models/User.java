@@ -8,21 +8,13 @@ import java.util.List;
 //lets us know user class will be table in database
 public class User {
     //this reads ,creates, update
-
     @Id
-    //this tells mySQL that id will be uinque for each uer
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    //modified identity to auto...see if works
+    private Long id;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Answer> answers;
-    //one to many: one user can have multiple answers
-    //cascade setting ensures changes to user will be cascaded to answers
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Score score;
-    //one to one: one user can have one score at most,,,
-    //cascade setting ensures changes to user will be cascaded to score
+    @OneToOne(mappedBy="user")
+    private UserEntity userEntity;
 
     @Column
     //each attribute will be column in database
@@ -45,9 +37,7 @@ public class User {
 
     //this id attribute is a primary key in database
 
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
-    }
+
     public long getId(){
         return id;
     }
@@ -89,13 +79,6 @@ public class User {
         this.age = age;
     }
 
-    public Score getScore() {
-        return score;
-    }
-
-    public void setScore(Score score) {
-        this.score = score;
-    }
 
     public String getUser() {
         return user;
@@ -111,6 +94,10 @@ public class User {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
 }
