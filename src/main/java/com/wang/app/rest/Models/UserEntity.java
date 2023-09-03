@@ -17,7 +17,8 @@ import java.util.List;
 public class UserEntity {
 
     @Id
-    private Long id; //im not sure if i remove this later
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @OneToOne
     @JoinColumn(name="id")

@@ -9,7 +9,9 @@ import java.util.List;
 public class User {
     //this reads ,creates, update
     @Id
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    //modified identity to auto...see if works
+    private Long id;
 
     @OneToOne(mappedBy="user")
     private UserEntity userEntity;
@@ -97,4 +99,5 @@ public class User {
     public void setUserEntity(UserEntity userEntity) {
         this.userEntity = userEntity;
     }
+
 }
