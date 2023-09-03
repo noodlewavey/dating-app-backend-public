@@ -3,6 +3,7 @@ package com.wang.app.rest.service;
 import com.wang.app.rest.Models.Answer;
 import com.wang.app.rest.Models.AnswerInfo;
 import com.wang.app.rest.Models.Score;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +11,8 @@ import java.util.Map;
 
 @Service
 public class ScoreCalculationService{
+
+    @Transactional
     public Score calculateScore(List<Answer> answers, Map<Integer,AnswerInfo> questionToMap) {
         int Extraversion = 0;
         int Agreeableness = 0;

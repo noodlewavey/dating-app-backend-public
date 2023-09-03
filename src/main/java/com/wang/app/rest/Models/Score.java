@@ -12,9 +12,11 @@ public class Score {
     private Long id;
 
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_entity_id")
     private UserEntity user;
+    //this is a foreign key
+    //should store the same value of userentity's id.
 
     @Column
     private int Extraversion;
@@ -75,9 +77,6 @@ public class Score {
         Intellect = intellect;
     }
 
-    public void setUserEntity(UserEntity user) {
-        this.user = user;
-    }
 
     public UserEntity getUserEntity() {
         return user;
@@ -93,4 +92,8 @@ public class Score {
                 ", intellect=" +getIntellect() +
                 '}';
     }
+    public void setUserEntity(UserEntity user) {
+        this.user = user;
+    }
+
 }

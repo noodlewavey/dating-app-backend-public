@@ -2,6 +2,7 @@ package com.wang.app.rest.Controller;
 
 
 import com.wang.app.rest.Models.*;
+import com.wang.app.rest.Repo.ScoreRepository;
 import com.wang.app.rest.Repo.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class QuizController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ScoreRepository scoreRepository;
 
     @Autowired
     private ScoreCalculationService scoreCalculationService; //inject the service into the controller
@@ -93,18 +97,20 @@ public class QuizController {
 
     @PostMapping("/submit-answers")
     public ResponseEntity<Score> submitAnswers(@RequestBody Map<Integer, Integer> answersData, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        //Create a new user and save it to the database
-
         UserEntity currentUserEntity = customUserDetails.getUserEntity();
 
-        //the input array must have keys and values
-        //example of input array: {1:2, 2:4, 3:1}
-        //left is question ID, right is answer value
-        //this would be JSON, the keys and values are used to represent properties and values of an object 
+        // If currentUserEntity is a new entity (not yet saved), save it first so it has an ID
+        if (currentUserEntity.getId() == null) {
+            userRepository.save(currentUserEntity);
+        } else if (currentUserEntity.getScore() != null) {
+            Score oldScore = currentUserEntity.getScore();
+            currentUserEntity.setScore(null); // Unlink from the user
+            scoreRepository.delete(oldScore); // Delete old score from database
+        }
 
-        //Creating answer objects and associating them with the user
+
+        // Creating answer objects and associating them with the user
         List<Answer> answers = new ArrayList<>();
-        //looping over array of answers and creating answer objects
         for (Map.Entry<Integer, Integer> entry : answersData.entrySet()) {
             Integer questionId = entry.getKey();
             Integer answerValue = entry.getValue();
@@ -114,22 +120,20 @@ public class QuizController {
             answers.add(answer);  // Add the answer to the answers list
         }
 
-        //Set answers for the user
+        // Set answers for the user
         currentUserEntity.setAnswers(answers);
 
-        //Calculating score based on answers
-        Score score = scoreCalculationService.calculateScore(answers, questionToMap);
+        // Calculating score based on answers
+        Score score = (scoreCalculationService.calculateScore(answers, questionToMap));//buggy still if i do score.setUsereNTTIY...
+//        score.setUserEntity(currentUserEntity);//the culprit here...
 
-        //Creating score object and associating it with the user
+        // Associate the score with the user on both sides
         currentUserEntity.setScore(score);
-//        score.setUserEntity(currentUserEntity);
-        //addeed this so userentity is not null
 
-        //Saving user to the database
+        // Save the user entity which should cascade the saves to Score and Answer
         userRepository.save(currentUserEntity);
 
-        //Return a response to the client
         return ResponseEntity.ok(score);
-
     }
+
 }
