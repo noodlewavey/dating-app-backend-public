@@ -114,7 +114,6 @@ public class QuizController {
             answers.add(answer);  // Add the answer to the answers list
         }
 
-
         //Set answers for the user
         currentUserEntity.setAnswers(answers);
 
@@ -123,6 +122,8 @@ public class QuizController {
 
         //Creating score object and associating it with the user
         currentUserEntity.setScore(score);
+//        score.setUserEntity(currentUserEntity);
+        //addeed this so userentity is not null
 
         //Saving user to the database
         userRepository.save(currentUserEntity);

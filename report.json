@@ -1,0 +1,58 @@
+{
+  "individualResults": [
+    {
+      "schemaVersion": "1",
+      "schemaName": "",
+      "migrations": [
+        {
+          "category": "",
+          "version": "1",
+          "rawVersion": "1",
+          "description": "\u003c\u003c Flyway Baseline \u003e\u003e",
+          "type": "BASELINE",
+          "installedOnUTC": "2023-09-03T15:29:20Z",
+          "state": "Baseline",
+          "undoable": "No",
+          "filepath": "",
+          "undoFilepath": "",
+          "installedBy": "root",
+          "executionTime": 0
+        }
+      ],
+      "flywayVersion": "9.22.0",
+      "database": "crudusers",
+      "allSchemasEmpty": false,
+      "timestamp": "2023-09-03T11:39:53.058220",
+      "operation": "info",
+      "exception": null,
+      "licenseFailed": false
+    },
+    {
+      "schemaVersion": "1",
+      "schemaName": "",
+      "migrations": [
+        {
+          "category": "",
+          "version": "1",
+          "rawVersion": "1",
+          "description": "\u003c\u003c Flyway Baseline \u003e\u003e",
+          "type": "BASELINE",
+          "installedOnUTC": "2023-09-03T15:29:20Z",
+          "state": "Baseline",
+          "undoable": "No",
+          "filepath": "",
+          "undoFilepath": "",
+          "installedBy": "root",
+          "executionTime": 0
+        }
+      ],
+      "flywayVersion": "9.22.0",
+      "database": "crudusers",
+      "allSchemasEmpty": false,
+      "timestamp": "2023-09-03T11:40:10.337895",
+      "operation": "info",
+      "exception": null,
+      "licenseFailed": false
+    }
+  ]
+}

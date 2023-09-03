@@ -1,0 +1,17 @@
+databaseType = "MySql"
+name = "dating app server"
+id = "1e4bb07a-551f-4af7-9df0-28cb4f067217"
+
+[flywayDesktop]
+developmentEnvironment = "development"
+shadowEnvironment = "shadow"
+schemaModel = "./schema-model"
+
+[redgateCompare]
+filterFile = "filter.rgf"
+
+[flyway]
+mixed = true
+outOfOrder = true
+locations = ["filesystem:migrations"]
+validateMigrationNaming = true
