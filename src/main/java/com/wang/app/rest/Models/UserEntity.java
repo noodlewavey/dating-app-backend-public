@@ -27,7 +27,8 @@ public class UserEntity {
 
     private String username;
 
-    private String password;
+    private String password = "defaultPassword";
+
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL) //want roles to be shown
     //fetchtype eager: when we get user, we want to get roles as well

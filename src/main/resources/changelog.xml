@@ -141,4 +141,12 @@
     <changeSet author="jasminewang (generated)" id="1693848246296-17">
         <addForeignKeyConstraint baseColumnNames="user_entity_id" baseTableName="score" constraintName="FKmbc3aaxadsspbc79irkjluo7a" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
+    <changeSet  author="jasminewang"  id="addDefaultValue-example">
+        <addDefaultValue  columnName="password"
+                          defaultValue="defaultPassword"
+                          schemaName="crudusers"
+                          tableName="users"/>
+    </changeSet>
+
+
 </databaseChangeLog>

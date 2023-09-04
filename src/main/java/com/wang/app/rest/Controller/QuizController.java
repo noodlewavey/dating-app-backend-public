@@ -128,6 +128,7 @@ public class QuizController {
 //        score.setUserEntity(currentUserEntity);//the culprit here...
         score.setUserEntity(currentUserEntity); // Set the relationship in the Score entity first
         currentUserEntity.setScore(score);
+        currentUserEntity.setUsername(customUserDetails.getUsername());
         // Associate the score with the user on both sides of the relationship
 //if setting relationship in userentity first, then set into score....relationship might point to entity that hasnt been persistee dyet
 
