@@ -141,16 +141,4 @@
     <changeSet author="jasminewang (generated)" id="1693848246296-17">
         <addForeignKeyConstraint baseColumnNames="user_entity_id" baseTableName="score" constraintName="FKmbc3aaxadsspbc79irkjluo7a" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
-
-    <changeSet id="unique_id_for_changeset" author="your_name">
-        <dropTable tableName="user_seq"/>
-    </changeSet>
-
-    <changeSet id="add-user-seq-table-001" author="yourName">
-        <createTable tableName="user_seq">
-            <column name="next_val" type="BIGINT"/>
-        </createTable>
-    </changeSet>
 </databaseChangeLog>
-
-

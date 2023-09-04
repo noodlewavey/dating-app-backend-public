@@ -58,28 +58,28 @@ public ResponseEntity<String> register(@RequestBody RegisterDto registerDto){
     if(userRepository.existsByUsername(registerDto.getUsername())){
         return new ResponseEntity<>("Username is taken", HttpStatus.BAD_REQUEST);
     }
-
     User newUser = new User();
-    // Ideally, you should set any other fields for the User object here.
-    // For now, I'm assuming the User object only has an ID and a reference to UserEntity.
-
-    // Save the User object first.
+// Save the User object first.
     newUser = userRepo.save(newUser); // This will populate the ID of the newUser object.
 
     UserEntity userEntity = new UserEntity();
-    userEntity.setUser(newUser); // Set the associated User object.
 
-    // Now, set the other fields for UserEntity.
+// Set the associated User object for UserEntity.
+    userEntity.setUser(newUser);
+
+// Now, set the other fields for UserEntity.
     userEntity.setUsername(registerDto.getUsername());
     userEntity.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 
     Role roles = roleRepository.findByName("USER").get();
     userEntity.setRoles(Collections.singletonList(roles));
 
-    // Save the UserEntity object.
+// Save the UserEntity object after setting the associated User object.
     userRepository.save(userEntity);
 
     return new ResponseEntity<>("User registered success", HttpStatus.OK);
+
+
 }
 
 
