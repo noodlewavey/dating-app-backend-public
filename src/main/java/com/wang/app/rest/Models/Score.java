@@ -12,7 +12,7 @@ public class Score {
     private Long id;
 
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_entity_id")
     private UserEntity user;
     //this is a foreign key

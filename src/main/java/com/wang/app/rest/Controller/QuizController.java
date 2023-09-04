@@ -126,9 +126,10 @@ public class QuizController {
         // Calculating score based on answers
         Score score = (scoreCalculationService.calculateScore(answers, questionToMap));//buggy still if i do score.setUsereNTTIY...
 //        score.setUserEntity(currentUserEntity);//the culprit here...
+        score.setUserEntity(currentUserEntity); // Set the relationship in the Score entity first
         currentUserEntity.setScore(score);
-        score.setUserEntity(currentUserEntity);
         // Associate the score with the user on both sides of the relationship
+//if setting relationship in userentity first, then set into score....relationship might point to entity that hasnt been persistee dyet
 
         // Save the user entity which should cascade the saves to Score and Answer
         userRepository.save(currentUserEntity);
