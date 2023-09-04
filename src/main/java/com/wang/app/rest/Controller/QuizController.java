@@ -97,7 +97,9 @@ public class QuizController {
     //WHY IS THE return type map and not Hashmap
 
 
+
     @PostMapping("/submit-answers")
+    @Transactional
     public ResponseEntity<Score> submitAnswers(@RequestBody Map<Integer, Integer> answersData, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         UserEntity currentUserEntity = customUserDetails.getUserEntity();
 
@@ -105,9 +107,12 @@ public class QuizController {
         if (currentUserEntity.getId() == null) {
             userRepository.save(currentUserEntity);
         } else if (currentUserEntity.getScore() != null) {
-            Score oldScore = currentUserEntity.getScore();
-            currentUserEntity.setScore(null); // Unlink from the user
-            scoreRepository.delete(oldScore); // Delete old score from database
+//            Score oldScore = currentUserEntity.getScore();// Unlink from the score
+//            currentUserEntity.setScore(null); // Save the user entity without the score///should delete it all
+//            scoreRepository.delete(oldScore); // Delete old score from database
+            Score scoreRemove = scoreRepository.findById(currentUserEntity.getScore().getId()).get();
+            scoreRepository.delete(scoreRemove);
+            //https://www.geeksforgeeks.org/spring-data-jpa-delete-records-from-mysql/
         }
 
 
