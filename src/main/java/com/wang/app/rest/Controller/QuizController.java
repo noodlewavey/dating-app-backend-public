@@ -5,6 +5,7 @@ import com.wang.app.rest.Models.*;
 import com.wang.app.rest.Repo.ScoreRepository;
 import com.wang.app.rest.Repo.UserRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -94,6 +95,7 @@ public class QuizController {
         questionToMap.put(50, new AnswerInfo(5, "-"));
     }
     //WHY IS THE return type map and not Hashmap
+
 
     @PostMapping("/submit-answers")
     public ResponseEntity<Score> submitAnswers(@RequestBody Map<Integer, Integer> answersData, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
